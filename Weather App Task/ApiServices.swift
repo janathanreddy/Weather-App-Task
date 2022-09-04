@@ -13,7 +13,6 @@ class ApiServices{
     
     func makeapicall<T:Decodable>(url:URL,type:String,completionHandler:@escaping(Swift.Result<T,Error>) -> Void){
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
         URLSession(configuration: .default).dataTask(with: request) { [self] (data, response, error) in
