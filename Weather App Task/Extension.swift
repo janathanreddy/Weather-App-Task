@@ -47,7 +47,9 @@ extension UIImageView {
         if let imageFromCache = imageCache.object(forKey: urls as AnyObject) as? UIImage {
 
             self.image = imageFromCache
-            activityIndicator.stopAnimating()
+            DispatchQueue.main.async {
+                activityIndicator.stopAnimating()
+            }
             return
         }
 
@@ -56,7 +58,9 @@ extension UIImageView {
 
             if error != nil {
                 print(error as Any)
-                
+                DispatchQueue.main.async {
+                    activityIndicator.stopAnimating()
+                }
                 return
             }
 
@@ -65,8 +69,10 @@ extension UIImageView {
                 if let unwrappedData = data, let imageToCache = UIImage(data: unwrappedData) {
 
                         self.image = imageToCache
-
                     imageCache.setObject(imageToCache, forKey: urls as AnyObject)
+                    DispatchQueue.main.async {
+                        activityIndicator.stopAnimating()
+                    }
                 }
             })
         }).resume()

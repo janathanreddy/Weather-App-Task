@@ -23,6 +23,8 @@ class ViewController: UIViewController {
     var _forecast:Forecast?
     var _Current:Current?
     var _day:[Day]?
+    var _Forecastday:[Forecastday]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         registercell()
@@ -81,7 +83,7 @@ extension ViewController:UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return section == 0 ? 1:_day?.count ?? 0
+            return section == 0 ? 1:_Forecastday?.count ?? 0
     }
     
     
@@ -107,6 +109,7 @@ extension ViewController:UITableViewDataSource{
             }
             cell.mintitlbl?.text = "Min Temp"
             cell.maxtitlbl?.text = "Max Temp"
+            cell.date?.text = _Forecastday?[indexPath.row].date
             var min = self._forecast?.forecastday?.compactMap(\.day).map(\.mintempC)
             cell.mintemplbl?.text = String(format:"\(_day?[indexPath.row].mintempC ?? 0)%@", "\u{00B0}") as String
             cell.maxtemplbl?.text = String(format:"\(_day?[indexPath.row].maxtempC ?? 0)%@", "\u{00B0}") as String
@@ -123,7 +126,7 @@ extension ViewController:UITableViewDataSource{
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == 0 ? 220:80
+        return indexPath.section == 0 ? 220:100
     }
     
 }
@@ -151,6 +154,7 @@ extension ViewController{
                     self?._location = res.location
                     self?._Current = res.current
                     self?._forecast = res.forecast
+                    self?._Forecastday = res.forecast?.forecastday
                     self?._day = res.forecast?.forecastday?.compactMap(\.day)
                     self?.tableView.reloadData()
                 }
@@ -358,8 +362,8 @@ class forcassecell:UITableViewCell{
         maxtemplbl?.centerXAnchor.constraint(equalTo: maxtitlbl!.centerXAnchor).isActive = true
         maxtemplbl?.centerYAnchor.constraint(equalTo: mintemplbl!.centerYAnchor).isActive = true
         
-//        date?.centerXAnchor.constraint(equalTo: co)
-        
+        date?.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        date?.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,constant: -4).isActive = true
     }
 }
 
